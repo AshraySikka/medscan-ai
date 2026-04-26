@@ -9,4 +9,4 @@ class PatientForm(forms.ModelForm):
 class ScanForm(forms.ModelForm):
     class Meta:
         model = Scan
-        fields = ['patient', 'scan_type', 'image']
+        fields = ['scan_type', 'image']
