@@ -1,0 +1,69 @@
+{% extends 'imaging/base.html' %}
+
+{% block content %}
+
+<!-- report header with patient info and scan type -->
+<div class="dashboard-header">
+    <div>
+        <h2 class="page-title">Radiology Report</h2>
+        <p class="section-label">{{ scan.patient.name }} — Age {{ scan.patient.age }} — MRN: {{ scan.patient.mrn }}</p>
+    </div>
+    <div>
+        <!-- showing scan type and date -->
+        <span class="tag">{{ scan.get_scan_type_display }}</span>
+        <span class="tag">{{ scan.uploaded_at|date:"M d, Y" }}</span>
+    </div>
+</div>
+
+<!-- uploaded scan image -->
+<div class="card">
+    <h3 class="section-label">Scan Image</h3>
+    <img src="{{ scan.image.url }}" alt="{{ scan.get_scan_type_display }}" class="scan-image" />
+</div>
+
+<!-- overall impression from claude -->
+<div class="card">
+    <h3 class="section-label">Impression</h3>
+    <p class="report-text">{{ report.findings.impression }}</p>
+</div>
+
+<!-- individual findings with severity indicators -->
+<div class="card">
+    <h3 class="section-label">Findings</h3>
+    {% for finding in report.findings.findings %}
+    <div class="finding-row">
+        <span class="severity-dot severity-{{ finding.severity }}"></span>
+        <div>
+            <strong>{{ finding.label }}</strong> — {{ finding.detail }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- recommendation from claude -->
+<div class="card">
+    <h3 class="section-label">Recommendation</h3>
+    <p class="report-text">{{ report.findings.recommendation }}</p>
+</div>
+
+<!-- confidence score bar -->
+<div class="card">
+    <h3 class="section-label">Model Confidence</h3>
+    <div class="confidence-row">
+        <span class="confidence-label">{{ report.confidence }}%</span>
+    </div>
+    <div class="confidence-bar">
+        <div class="confidence-fill" style="width: {{ report.confidence }}%"></div>
+    </div>
+</div>
+
+<!-- disclaimer -->
+<p class="disclaimer">This analysis is AI-generated and intended to assist — not replace — qualified radiologist review. Not for clinical decision-making without physician oversight.</p>
+
+<!-- navigation -->
+<div style="margin-top: 1rem;">
+    <a href="{% url 'dashboard' %}" class="btn">Back to Dashboard</a>
+    <a href="{% url 'upload_scan' %}" class="btn" style="margin-left: 8px;">New Scan</a>
+</div>
+
+{% endblock %}
