@@ -6,7 +6,7 @@
 <div class="dashboard-header">
     <div>
         <h2 class="page-title">Radiology Report</h2>
-        <p class="section-label">{{ scan.patient.name }} — Age {{ scan.patient.age }} — MRN: {{ scan.patient.mrn }}</p>
+        <p class="section-label">{{ scan.patient.name }} <br>Age: {{ scan.patient.age }} <br>MRN: {{ scan.patient.mrn }}</p>
     </div>
     <div>
         <!-- showing scan type and date -->
@@ -58,12 +58,12 @@
 </div>
 
 <!-- disclaimer -->
-<p class="disclaimer">This analysis is AI-generated and intended to assist — not replace — qualified radiologist review. Not for clinical decision-making without physician oversight.</p>
+<p class="disclaimer">This analysis is AI-generated and intended to assist, not replace a qualified radiologist's review. Not for clinical decision-making without physician oversight.</p>
 
 <!-- navigation -->
-<div style="margin-top: 1rem;">
+<div style="margin-top: 1rem;display:flex;gap:10px;">
     <a href="{% url 'dashboard' %}" class="btn">Back to Dashboard</a>
-    <a href="{% url 'upload_scan' %}" class="btn" style="margin-left: 8px;">New Scan</a>
+    <a href="{% url 'upload_scan' %}" class="btn btn-accent">+ New Scan</a>
 </div>
 
 {% endblock %}

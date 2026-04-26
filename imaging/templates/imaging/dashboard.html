@@ -2,20 +2,44 @@
 
 {% block content %}
 
-<!-- header row with title and new scan button -->
 <div class="dashboard-header">
-    <h2 class="page-title">Dashboard</h2>
-    <a href="{% url 'upload_scan' %}" class="btn">+ New Scan</a>
+    <div>
+        <h2 class="page-title">Dashboard</h2>
+        <p style="font-size:13px;color:#8a9bb5;margin-top:2px">Welcome to MedScan AI</p>
+    </div>
+    <a href="{% url 'upload_scan' %}" class="btn btn-accent">+ New Scan</a>
 </div>
 
-<!-- recent scans section, showing last 5 only (set in views.py) -->
+<!-- stat cards -->
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-number">{{ patients.count }}</div>
+        <div class="stat-label">Total <span class="stat-accent">Patients</span></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ scans.count }}</div>
+        <div class="stat-label">Recent <span class="stat-accent">Scans</span></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number stat-accent">AI</div>
+        <div class="stat-label">Powered by <span class="stat-accent">Claude</span></div>
+        <div class="stat-label">&copy; <span class="stat-name">Ashray Sikka</span></div>
+    </div>
+</div>
+
+<!-- recent scans -->
 <div class="card">
     <h3 class="section-label">Recent Scans</h3>
     {% if scans %}
         {% for scan in scans %}
         <div class="list-row">
-            <!-- get_scan_type_display returns human readable label instead of raw value -->
-            {{ scan.patient.name }} — {{ scan.get_scan_type_display }} — {{ scan.uploaded_at|date:"M d, Y" }}
+            <span style="flex:1">
+                <strong>{{ scan.patient.name }}</strong> : {{ scan.get_scan_type_display }}
+            </span>
+            <span style="font-size:12px;color:#8a9bb5">{{ scan.uploaded_at|date:"M d, Y" }}</span>
+            {% if scan.report %}
+                <a href="{% url 'report' scan.id %}" class="btn" style="font-size:12px;padding:5px 14px;">View Report</a>
+            {% endif %}
         </div>
         {% endfor %}
     {% else %}
@@ -23,16 +47,19 @@
     {% endif %}
 </div>
 
-<!-- all patients registered in the system -->
+<!-- all patients -->
 <div class="card">
     <h3 class="section-label">All Patients</h3>
     {% if patients %}
         {% for patient in patients %}
         <div class="list-row">
-            <!-- patient name links to their full scan history -->
-            <a href="{% url 'patient_history' patient.id %}" style="color:#1D9E75;text-decoration:none;">
-                {{ patient.name }}
-            </a> — Age {{ patient.age }} — MRN: {{ patient.mrn }}
+            <span style="flex:1">
+                <a href="{% url 'patient_history' patient.id %}" style="color:#0f1f3d;font-weight:600;text-decoration:none;">
+                    {{ patient.name }}
+                </a>
+                <span style="font-size:12px;color:#8a9bb5;margin-left:8px">Age {{ patient.age }} · MRN: {{ patient.mrn }}</span>
+            </span>
+            <a href="{% url 'patient_history' patient.id %}" class="btn" style="font-size:12px;padding:5px 14px;">History</a>
         </div>
         {% endfor %}
     {% else %}

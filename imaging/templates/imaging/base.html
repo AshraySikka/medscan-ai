@@ -9,9 +9,10 @@
     <link rel="stylesheet" href="{% static 'imaging/style.css' %}">
 </head>
 <body>
+
     <!-- top navigation bar -->
     <nav>
-        <a href="{% url 'dashboard' %}" class="brand">MedScan AI</a>
+        <a href="{% url 'dashboard' %}" class="brand">MedScan <span>AI</span></a>
         <a href="{% url 'dashboard' %}">Dashboard</a>
         <a href="{% url 'upload_scan' %}">New Scan</a>
     </nav>
@@ -20,5 +21,14 @@
     <div class="container">
         {% block content %}{% endblock %}
     </div>
+
+    <!-- footer -->
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <span class="footer-brand">MedScan <span>AI</span></span>
+            <span class="footer-copy">&copy; 2026 Ashray Sikka | All rights reserved</span>
+        </div>
+    </footer>
+
 </body>
 </html>

@@ -8,7 +8,7 @@
         <h2 class="page-title">{{ patient.name }}</h2>
         <p class="section-label">Age {{ patient.age }} — MRN: {{ patient.mrn }} — Patient since {{ patient.created_at|date:"M d, Y" }}</p>
     </div>
-    <a href="{% url 'upload_scan' %}" class="btn">+ New Scan</a>
+    <a href="{% url 'upload_scan' %}" class="btn btn-accent">+ New Scan</a>
 </div>
 
 <!-- all scans for this patient -->
