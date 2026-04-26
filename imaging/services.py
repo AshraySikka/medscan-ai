@@ -12,16 +12,30 @@ def encode_image(image_path):
         return base64.b64encode(image_file.read()).decode('utf-8')
     
 def get_image_mime_type(image_path):
-    # claude needs to know what kind of image it is receiving, the format basically
-    ext = image_path.lower().split('.')[-1]
-    mime_types = {
-        'jpg': 'image/jpeg',
-        'jpeg': 'image/jpeg',
-        'png': 'image/png',
-        'gif': 'image/gif',
-        'webp': 'image/webp',        
-    }
-    return mime_types.get(ext, 'image/jpeg') # default to 'jpeg' if unknown
+    # read the first few bytes of the file to detect actual format
+    # file extensions can lie, magic bytes don't
+    with open(image_path, 'rb') as f:
+        header = f.read(12)
+    
+    if header[:4] == b'\x89PNG':
+        return 'image/png'
+    elif header[:3] == b'GIF':
+        return 'image/gif'
+    elif header[:4] in (b'RIFF',) and header[8:12] == b'WEBP':
+        return 'image/webp'
+    elif header[:2] in (b'\xff\xd8',):
+        return 'image/jpeg'
+    else:
+        # fall back to extension-based detection if magic bytes don't match
+        ext = image_path.lower().split('.')[-1]
+        mime_types = {
+            'jpg': 'image/jpeg',
+            'jpeg': 'image/jpeg',
+            'png': 'image/png',
+            'gif': 'image/gif',
+            'webp': 'image/webp',
+        }
+        return mime_types.get(ext, 'image/jpeg')# default to 'jpeg' if unknown
 
 
 def analyze_scan(scan):
