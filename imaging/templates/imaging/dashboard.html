@@ -29,7 +29,10 @@
     {% if patients %}
         {% for patient in patients %}
         <div class="list-row">
-            {{ patient.name }} — Age {{ patient.age }} — MRN: {{ patient.mrn }}
+            <!-- patient name links to their full scan history -->
+            <a href="{% url 'patient_history' patient.id %}" style="color:#1D9E75;text-decoration:none;">
+                {{ patient.name }}
+            </a> — Age {{ patient.age }} — MRN: {{ patient.mrn }}
         </div>
         {% endfor %}
     {% else %}

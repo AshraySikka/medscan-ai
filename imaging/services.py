@@ -1,4 +1,4 @@
-import anthropic 
+import anthropic
 import base64
 import json
 from django.conf import settings

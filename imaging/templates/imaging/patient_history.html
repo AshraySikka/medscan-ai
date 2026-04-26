@@ -1,0 +1,40 @@
+{% extends 'imaging/base.html' %}
+
+{% block content %}
+
+<!-- patient header -->
+<div class="dashboard-header">
+    <div>
+        <h2 class="page-title">{{ patient.name }}</h2>
+        <p class="section-label">Age {{ patient.age }} — MRN: {{ patient.mrn }} — Patient since {{ patient.created_at|date:"M d, Y" }}</p>
+    </div>
+    <a href="{% url 'upload_scan' %}" class="btn">+ New Scan</a>
+</div>
+
+<!-- all scans for this patient -->
+<div class="card">
+    <h3 class="section-label">Scan History</h3>
+    {% if scans %}
+        {% for scan in scans %}
+        <div class="finding-row">
+            <div style="flex: 1;">
+                <strong>{{ scan.get_scan_type_display }}</strong> — {{ scan.uploaded_at|date:"M d, Y" }}
+            </div>
+            <!-- only show view report link if a report exists for this scan -->
+            {% if scan.report %}
+                <a href="{% url 'report' scan.id %}" class="btn" style="font-size:12px;padding:5px 12px;">View Report</a>
+            {% else %}
+                <span style="font-size:12px;color:#999;">No report</span>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <p class="empty-state">No scans yet for this patient.</p>
+    {% endif %}
+</div>
+
+<div style="margin-top:1rem;">
+    <a href="{% url 'dashboard' %}" class="btn">Back to Dashboard</a>
+</div>
+
+{% endblock %}

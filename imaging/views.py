@@ -67,3 +67,16 @@ def report(request, scan_id):
         'scan':scan,
         'report':report
     })
+
+
+def patient_history(request, patient_id):
+    # fetch the patient or 404 if not found
+    patient = get_object_or_404(Patient, id=patient_id)
+
+    # get all scans for this patient, most recent first
+    scans = Scan.objects.filter(patient = patient).order_by('-uploaded_at')
+
+    return render(request, 'imaging/patient_history.html', {
+        'patient' : patient,
+        'scans' : scans
+    })
