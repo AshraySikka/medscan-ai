@@ -1,0 +1,40 @@
+{% extends 'imaging/base.html' %}
+
+{% block content %}
+
+<!-- header row with title and new scan button -->
+<div class="dashboard-header">
+    <h2 class="page-title">Dashboard</h2>
+    <a href="{% url 'upload_scan' %}" class="btn">+ New Scan</a>
+</div>
+
+<!-- recent scans section, showing last 5 only (set in views.py) -->
+<div class="card">
+    <h3 class="section-label">Recent Scans</h3>
+    {% if scans %}
+        {% for scan in scans %}
+        <div class="list-row">
+            <!-- get_scan_type_display returns human readable label instead of raw value -->
+            {{ scan.patient.name }} — {{ scan.get_scan_type_display }} — {{ scan.uploaded_at|date:"M d, Y" }}
+        </div>
+        {% endfor %}
+    {% else %}
+        <p class="empty-state">No scans yet. Upload one to get started.</p>
+    {% endif %}
+</div>
+
+<!-- all patients registered in the system -->
+<div class="card">
+    <h3 class="section-label">All Patients</h3>
+    {% if patients %}
+        {% for patient in patients %}
+        <div class="list-row">
+            {{ patient.name }} — Age {{ patient.age }} — MRN: {{ patient.mrn }}
+        </div>
+        {% endfor %}
+    {% else %}
+        <p class="empty-state">No patients yet.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

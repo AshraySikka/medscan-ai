@@ -1,0 +1,112 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: sans-serif;
+    background: #f5f5f5;
+    color: #333;
+}
+
+nav {
+    background: #1D9E75;
+    padding: 1rem 2rem;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+nav .brand {
+    font-size: 16px;
+    font-weight: 500;
+    margin-right: auto;
+}
+
+.container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #e0e0e0;
+}
+
+.btn {
+    padding: 8px 16px;
+    background: #1D9E75;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn:hover {
+    background: #0F6E56;
+}
+
+label {
+    font-size: 13px;
+    color: #666;
+    display: block;
+    margin-bottom: 4px;
+    margin-top: 12px;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #1D9E75;
+}
+
+.page-title {
+    font-size: 18px;
+    margin-bottom: 1rem;
+}
+
+.section-label {
+    font-size: 13px;
+    color: #999;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.list-row {
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+}
+
+.empty-state {
+    font-size: 14px;
+    color: #999;
+}

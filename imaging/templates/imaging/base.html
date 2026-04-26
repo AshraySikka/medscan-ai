@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedScan AI</title>
+    <!-- linking our external stylesheet -->
+    <link rel="stylesheet" href="{% static 'imaging/style.css' %}">
+</head>
+<body>
+    <!-- top navigation bar -->
+    <nav>
+        <a href="{% url 'dashboard' %}" class="brand">MedScan AI</a>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'upload_scan' %}">New Scan</a>
+    </nav>
+
+    <!-- main content area, each page fills this block -->
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{% extends 'imaging/base.html' %}
+
+{% block content %}
+<div class="card">
+    <h2 class="page-title">New Scan</h2>
+
+    <!-- enctype needed for file uploads, without this the image never reaches the server -->
+    <form method="POST" enctype="multipart/form-data">
+
+        <!-- django security token, required on every POST form -->
+        {% csrf_token %}
+
+        <h3 class="section-label">Patient Info</h3>
+        <label>Full Name</label>
+        {{ patient_form.name }}
+        <label>Age</label>
+        {{ patient_form.age }}
+        <label>MRN</label>
+        {{ patient_form.mrn }}
+
+        <h3 class="section-label">Scan Details</h3>
+        <label>Scan Type</label>
+        {{ scan_form.scan_type }}
+        <label>Upload Image</label>
+        {{ scan_form.image }}
+
+        <br><br>
+        <button type="submit" class="btn">Upload & Analyze</button>
+    </form>
+</div>
+{% endblock %}
