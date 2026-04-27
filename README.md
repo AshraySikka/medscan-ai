@@ -1,6 +1,6 @@
 # MedScan AI
 
-AI-powered medical imaging analysis platform built with Django and Claude Vision API. Upload radiology images — X-rays, CT scans, MRIs — and get structured clinical reports generated instantly by Claude.
+AI-powered medical imaging analysis platform built with Django and Claude Vision API. Upload radiology images: X-rays, CT scans, MRIs and get structured clinical reports generated instantly by Claude.
 
 ## What it does
 
@@ -89,7 +89,7 @@ Visit `http://localhost:8000/admin` for the admin panel.
 ## How the AI analysis works
 
 1. User uploads an image and fills in patient info
-2. Django saves the image to disk using a clean naming convention — `patient_name-scan_type-date.ext`
+2. Django saves the image to disk using a clean naming convention: `patient_name-scan_type-date.ext`
 3. `services.py` reads the image, encodes it to base64, and detects the true MIME type from magic bytes
 4. The image and a structured prompt are sent to Claude Vision API
 5. Claude returns a JSON report with impression, findings, severity levels, recommendation, and confidence score
