@@ -26,6 +26,6 @@ jobs:
             
             - name: Run tests
               env:
-                ANTHROPIC_API_KEY: ${{secrets.ANTHROPIC_API_KEY}}
+                ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
               run: |
-                pytest imaging/tests/test_models.py -v
+                pytest imaging/tests/ -v
