@@ -19,6 +19,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='scan',
             name='image',
-            field=models.ImageField(upload_to=imaging.models.scan_upload_path),
+            field=models.ImageField(upload_to='scans/'),
         ),
     ]

@@ -2,12 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Patient, Scan, Report
 from .forms import PatientForm, ScanForm
 from .services import analyze_scan
+import cloudinary.uploader
 import sys
 
 # View for a quick dashboard
 def dashboard(request):
     patients = Patient.objects.all().order_by('-created_at')
-    scans = Scan.objects.all().order_by('-uploaded_at')[:5] # this will be loading the last 5 scans
+    scans = Scan.objects.all().order_by('-uploaded_at')[:5] # loading the last 5 scans
 
     return render(request, 'imaging/dashboard.html', {
         'patients': patients,
@@ -30,13 +31,24 @@ def upload_scan(request):
                 defaults={'name': name, 'age': age}
             )
 
-            scan = scan_form.save(commit=False) # not saved to db yet, need to attach patient first
-            scan.patient = patient
-            scan.save()
+            # create scan object without saving image yet
+            scan = Scan.objects.create(
+                patient=patient,
+                scan_type=request.POST.get('scan_type'),
+                image=None
+            )
 
-            # debug: verify where the image is being saved
-            print(f"Image name: {scan.image.name}", file=sys.stderr)
-            print(f"Image URL: {scan.image.url}", file=sys.stderr)
+            # upload image directly to cloudinary and store the URL
+            uploaded_file = request.FILES.get('image')
+            if uploaded_file:
+                upload_result = cloudinary.uploader.upload(
+                    uploaded_file,
+                    folder='scans',
+                    public_id=f"{patient.name.replace(' ', '_').lower()}_{scan.scan_type}_{scan.id}",
+                )
+                scan.image = upload_result['secure_url']
+                scan.save()
+                print(f"Cloudinary URL: {upload_result['secure_url']}", file=sys.stderr)
 
             # sending scan to claude and getting back raw response and parsed findings
             raw_response, findings_data = analyze_scan(scan)
