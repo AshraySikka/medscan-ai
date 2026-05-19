@@ -72,3 +72,53 @@ Visit `http://localhost:8000` to use the app.
 Visit `http://localhost:8000/admin` for the admin panel.
 
 ## Project Structure
+
+  medscan-ai/
+  ├── medscan/              # project config, settings, root urls
+  ├── imaging/              # main app
+  │   ├── models.py         # Patient, Scan, Report models
+  │   ├── views.py          # dashboard, upload, report, patient history
+  │   ├── services.py       # Claude Vision API integration
+  │   ├── forms.py          # PatientForm, ScanForm
+  │   ├── urls.py           # app-level URL routing
+  │   ├── admin.py          # admin panel registration
+  │   ├── static/           # CSS
+  │   └── templates/        # HTML templates
+  ├── requirements.txt
+  └── .env                  # API key (gitignored)
+
+  ## How the AI analysis works
+
+1. User uploads an image and fills in patient info
+2. Image is uploaded directly to Cloudinary for persistent cloud storage
+3. `services.py` fetches the image from Cloudinary, encodes it to base64, and detects the MIME type from magic bytes
+4. The image and a structured prompt are sent to Claude Vision API
+5. Claude returns a JSON report with impression, findings, severity levels, recommendation, and confidence score
+6. The report is saved to the database and displayed on the report page
+
+## Tests
+
+22 tests across models, views, and services. Claude API calls are mocked so no tokens are used during testing.
+
+````bash
+pytest imaging/tests/ -v
+````
+
+## Supported Image Types
+
+JPEG, PNG, WebP, GIF
+
+## Disclaimer
+
+This application is for demonstration purposes only. AI-generated reports are not intended for clinical decision-making and should not replace qualified radiologist review.
+
+## Author
+
+Ashray Sikka · [github.com/AshraySikka](https://github.com/AshraySikka) · [linkedin.com/in/ashraysikka](https://linkedin.com/in/ashraysikka)
+````
+
+```bash
+git add README.md
+git commit -m "docs: update README with live URL, PostgreSQL, Cloudinary, and test info"
+git push origin main
+```
