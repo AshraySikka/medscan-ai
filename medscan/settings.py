@@ -135,3 +135,6 @@ ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY')
 # static files served by whitenoise in production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
+CSRF_TRUSTED_ORIGINS = ['https://medscan-ai-production-249d.up.railway.app']
