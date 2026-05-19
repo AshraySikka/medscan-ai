@@ -18,6 +18,9 @@ if os.path.exists('.env'):
     from dotenv import load_dotenv
     load_dotenv()
 
+import sys
+print(f"ENV KEYS: {sorted(os.environ.keys())}", file=sys.stderr)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -84,9 +87,15 @@ WSGI_APPLICATION = 'medscan.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         default=f'sqlite:///{BASE_DIR}/db.sqlite3',
-        conn_max_age=600
+        conn_max_age=600,
+        conn_health_checks=True,
     )
 }
+
+# force override if DATABASE_URL is explicitly set
+database_url = os.environ.get('DATABASE_URL')
+if database_url:
+    DATABASES['default'] = dj_database_url.parse(database_url, conn_max_age=600)
 
 
 # Password validation
