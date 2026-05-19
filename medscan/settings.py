@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-fallback-key-for-dev'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost 127.0.0.1').split()
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost 127.0.0.1 medscan-ai-production-249d.up.railway.app').split()
 
 
 # Application definition
