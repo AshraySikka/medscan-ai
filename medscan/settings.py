@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import dj_database_url
 import os
+# cloudinary config for media file storage
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 # only load .env file in local development, not on Railway
 if os.path.exists('.env'):
     from dotenv import load_dotenv
@@ -43,6 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cloudinary_storage',  
+    'cloudinary',          
     'imaging',
 ]
 
@@ -139,6 +146,14 @@ STATICFILES_DIRS = [
 ]
 
 ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY')
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # static files served by whitenoise in production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
