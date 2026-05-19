@@ -1,7 +1,4 @@
 from django.db import models
-from django.core.files.storage import default_storage
-import os
-from datetime import date
 
 class Patient(models.Model):
     name = models.CharField(max_length=200)

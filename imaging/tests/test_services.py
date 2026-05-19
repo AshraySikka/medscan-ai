@@ -1,6 +1,6 @@
 import pytest
 import json
-from unittest.mock import MagicMock, patch, PropertyMock
+from unittest.mock import MagicMock, patch
 from imaging.models import Patient, Scan
 from imaging.services import analyze_scan, get_image_mime_type
 
@@ -31,15 +31,15 @@ def test_get_image_mime_type_unknown_defaults_to_jpeg(tmp_path):
     assert get_image_mime_type(str(f)) == "image/jpeg"
 
 def test_analyze_scan_returns_raw_and_parsed(tmp_path):
-    # creates a real fake image file
-    fake_image = tmp_path / "test.jpg"
-    fake_image.write_bytes(b'\xff\xd8\xff' + b'0' * 100)
+    # image is now a URLField so we pass a cloudinary style URL
+    # mocking requests.get so no real HTTP call is made
+    fake_image_bytes = b'\xff\xd8\xff' + b'0' * 100
 
     patient = Patient.objects.create(name="John Smith", age=45, mrn="MRN100")
     scan = Scan.objects.create(
         patient=patient,
         scan_type="chest_xray",
-        image="scans/test.jpg"
+        image="https://res.cloudinary.com/test/image/upload/scans/test.jpg"
     )
 
     fake_findings = {
@@ -54,10 +54,12 @@ def test_analyze_scan_returns_raw_and_parsed(tmp_path):
     mock_message = MagicMock()
     mock_message.content = [MagicMock(text=json.dumps(fake_findings))]
 
-    # mocking scan.image.path to return our temp file path
-    # bypasses django's media folder security check
+    # mocking both the Claude API call and the requests.get for image fetching
+    mock_response = MagicMock()
+    mock_response.content = fake_image_bytes
+
     with patch('imaging.services.client.messages.create', return_value=mock_message):
-        with patch.object(type(scan.image), 'path', new_callable=PropertyMock, return_value=str(fake_image)):
+        with patch('imaging.services.requests.get', return_value=mock_response):
             raw_response, findings_data = analyze_scan(scan)
 
     assert isinstance(raw_response, str)
@@ -66,14 +68,13 @@ def test_analyze_scan_returns_raw_and_parsed(tmp_path):
     assert len(findings_data['findings']) == 1
 
 def test_analyze_scan_confidence_score(tmp_path):
-    fake_image = tmp_path / "test.jpg"
-    fake_image.write_bytes(b'\xff\xd8\xff' + b'0' * 100)
+    fake_image_bytes = b'\xff\xd8\xff' + b'0' * 100
 
     patient = Patient.objects.create(name="Jane Doe", age=32, mrn="MRN101")
     scan = Scan.objects.create(
         patient=patient,
         scan_type="mri",
-        image="scans/test.jpg"
+        image="https://res.cloudinary.com/test/image/upload/scans/test.jpg"
     )
 
     fake_findings = {
@@ -86,22 +87,24 @@ def test_analyze_scan_confidence_score(tmp_path):
     mock_message = MagicMock()
     mock_message.content = [MagicMock(text=json.dumps(fake_findings))]
 
+    mock_response = MagicMock()
+    mock_response.content = fake_image_bytes
+
     with patch('imaging.services.client.messages.create', return_value=mock_message):
-        with patch.object(type(scan.image), 'path', new_callable=PropertyMock, return_value=str(fake_image)):
+        with patch('imaging.services.requests.get', return_value=mock_response):
             raw_response, findings_data = analyze_scan(scan)
 
     assert findings_data['confidence'] == 88
 
 def test_analyze_scan_strips_markdown_backticks(tmp_path):
     # checks that markdown code fences are stripped from claude response
-    fake_image = tmp_path / "test.jpg"
-    fake_image.write_bytes(b'\xff\xd8\xff' + b'0' * 100)
+    fake_image_bytes = b'\xff\xd8\xff' + b'0' * 100
 
     patient = Patient.objects.create(name="Bob Jones", age=55, mrn="MRN102")
     scan = Scan.objects.create(
         patient=patient,
         scan_type="ct_scan",
-        image="scans/test.jpg"
+        image="https://res.cloudinary.com/test/image/upload/scans/test.jpg"
     )
 
     fake_findings = {
@@ -117,8 +120,11 @@ def test_analyze_scan_strips_markdown_backticks(tmp_path):
     mock_message = MagicMock()
     mock_message.content = [MagicMock(text=wrapped_response)]
 
+    mock_response = MagicMock()
+    mock_response.content = fake_image_bytes
+
     with patch('imaging.services.client.messages.create', return_value=mock_message):
-        with patch.object(type(scan.image), 'path', new_callable=PropertyMock, return_value=str(fake_image)):
+        with patch('imaging.services.requests.get', return_value=mock_response):
             raw_response, findings_data = analyze_scan(scan)
 
     assert findings_data['impression'] == "Normal CT."

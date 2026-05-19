@@ -3,7 +3,6 @@ from .models import Patient, Scan, Report
 from .forms import PatientForm, ScanForm
 from .services import analyze_scan
 import cloudinary.uploader
-import sys
 
 # View for a quick dashboard
 def dashboard(request):
@@ -48,7 +47,6 @@ def upload_scan(request):
                 )
                 scan.image = upload_result['secure_url']
                 scan.save()
-                print(f"Cloudinary URL: {upload_result['secure_url']}", file=sys.stderr)
 
             # sending scan to claude and getting back raw response and parsed findings
             raw_response, findings_data = analyze_scan(scan)
