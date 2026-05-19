@@ -10,7 +10,7 @@
 </div>
 
 <div class="card">
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" id="upload-form">
         {% csrf_token %}
 
         <h3 class="section-label">Patient Info</h3>
@@ -28,10 +28,30 @@
         {{ scan_form.image }}
 
         <div style="margin-top:1.5rem;display:flex;gap:10px;align-items:center">
-            <button type="submit" class="btn btn-accent">Analyze with AI</button>
+            <button type="submit" class="btn btn-accent" id="submit-btn">Analyze with Claude AI</button>
             <a href="{% url 'dashboard' %}" class="btn">Cancel</a>
         </div>
+
+        <!-- loading state shown after form submission -->
+        <div id="loading-state" style="display:none;margin-top:1.5rem;">
+            <div style="display:flex;align-items:center;gap:12px;padding:1rem;background:#e8f5f0;border-radius:10px;border:1px solid #4FC9A4;">
+                <div class="loading-spinner"></div>
+                <div>
+                    <p style="font-size:14px;font-weight:600;color:#0f1f3d;">Analyzing with Claude AI</p>
+                    <p style="font-size:12px;color:#4a5568;margin-top:2px;">This usually takes 10 to 20 seconds. Please wait.</p>
+                </div>
+            </div>
+        </div>
+
     </form>
 </div>
+
+<script>
+    document.getElementById('upload-form').addEventListener('submit', function() {
+        // hide the button and show loading state when form is submitted
+        document.getElementById('submit-btn').style.display = 'none';
+        document.getElementById('loading-state').style.display = 'block';
+    });
+</script>
 
 {% endblock %}
