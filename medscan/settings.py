@@ -18,9 +18,6 @@ if os.path.exists('.env'):
     from dotenv import load_dotenv
     load_dotenv()
 
-import sys
-print(f"ENV KEYS: {sorted(os.environ.keys())}", file=sys.stderr)
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -149,6 +146,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 CSRF_TRUSTED_ORIGINS = ['https://medscan-ai-production-249d.up.railway.app']
-
-import sys
-print(f"DATABASE URL being used: {os.environ.get('DATABASE_URL', 'NOT FOUND')}", file=sys.stderr)
