@@ -155,7 +155,7 @@ CLOUDINARY_STORAGE = {
 # use cloudinary for media files in production, local filesystem in development
 if os.environ.get('CLOUDINARY_CLOUD_NAME'):
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-    MEDIA_URL = f'https://res.cloudinary.com/{os.environ.get("CLOUDINARY_CLOUD_NAME")}/'
+    MEDIA_URL = '/media/'  # cloudinary storage handles the full URL internally
 else:
     DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
     MEDIA_URL = '/media/'
