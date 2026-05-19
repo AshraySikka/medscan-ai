@@ -73,19 +73,19 @@ Visit `http://localhost:8000/admin` for the admin panel.
 
 ## Project Structure
 
-  medscan-ai/
-  ├── medscan/              # project config, settings, root urls
-  ├── imaging/              # main app
-  │   ├── models.py         # Patient, Scan, Report models
-  │   ├── views.py          # dashboard, upload, report, patient history
-  │   ├── services.py       # Claude Vision API integration
-  │   ├── forms.py          # PatientForm, ScanForm
-  │   ├── urls.py           # app-level URL routing
-  │   ├── admin.py          # admin panel registration
-  │   ├── static/           # CSS
-  │   └── templates/        # HTML templates
-  ├── requirements.txt
-  └── .env                  # API key (gitignored)
+    medscan-ai/
+    ├── medscan/              # project config, settings, root urls
+    ├── imaging/              # main app
+    │   ├── models.py         # Patient, Scan, Report models
+    │   ├── views.py          # dashboard, upload, report, patient history
+    │   ├── services.py       # Claude Vision API integration
+    │   ├── forms.py          # PatientForm, ScanForm
+    │   ├── urls.py           # app-level URL routing
+    │   ├── admin.py          # admin panel registration
+    │   ├── static/           # CSS
+    │   └── templates/        # HTML templates
+    ├── requirements.txt
+    └── .env                  # API key (gitignored)
 
   ## How the AI analysis works
 
