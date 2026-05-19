@@ -16,7 +16,7 @@ import os
 # cloudinary config for media file storage
 import cloudinary
 import cloudinary.uploader
-import cloudinary.api
+import cloudinary.api  # noqa
 
 # only load .env file in local development, not on Railway
 if os.path.exists('.env'):
@@ -48,8 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cloudinary_storage',  
-    'cloudinary',          
+    'cloudinary_storage',
+    'cloudinary',
     'imaging',
 ]
 
@@ -86,7 +86,6 @@ WSGI_APPLICATION = 'medscan.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
 
 DATABASES = {
     'default': dj_database_url.config(
@@ -138,26 +137,29 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'imaging/static'),
 ]
 
 ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY')
 
+# cloudinary storage settings
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# use cloudinary for media files in production, local filesystem in development
+if os.environ.get('CLOUDINARY_CLOUD_NAME'):
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    MEDIA_URL = f'https://res.cloudinary.com/{os.environ.get("CLOUDINARY_CLOUD_NAME")}/'
+else:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # static files served by whitenoise in production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
 
 CSRF_TRUSTED_ORIGINS = ['https://medscan-ai-production-249d.up.railway.app']
