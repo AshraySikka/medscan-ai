@@ -1,4 +1,6 @@
 staticfiles/* linguist-vendored
+staticfiles/* linguist-generated
 venv/* linguist-vendored
 *.min.js linguist-vendored
 *.min.css linguist-vendored
+node_modules/* linguist-vendored
