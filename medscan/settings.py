@@ -174,7 +174,3 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 CSRF_TRUSTED_ORIGINS = ['https://medscan-ai-production-249d.up.railway.app']
-
-# temporary debug prints to verify cloudinary and storage config on startup
-print(f"CLOUDINARY_CLOUD_NAME: {os.environ.get('CLOUDINARY_CLOUD_NAME', 'NOT FOUND')}", file=sys.stderr)
-print(f"DEFAULT_FILE_STORAGE: {DEFAULT_FILE_STORAGE}", file=sys.stderr)
