@@ -138,3 +138,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 CSRF_TRUSTED_ORIGINS = ['https://medscan-ai-production-249d.up.railway.app']
+
+import sys
+print(f"DATABASE URL being used: {os.environ.get('DATABASE_URL', 'NOT FOUND')}", file=sys.stderr)
