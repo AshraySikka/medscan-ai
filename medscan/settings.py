@@ -160,17 +160,21 @@ cloudinary.config(
     secure=True
 )
 
-# use cloudinary for media files in production, local filesystem in development
+# Django 5.1+ removed DEFAULT_FILE_STORAGE / STATICFILES_STORAGE; use STORAGES.
+# Cloudinary for media in production, local filesystem in development.
+MEDIA_URL = '/media/'
 if os.environ.get('CLOUDINARY_CLOUD_NAME'):
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-    MEDIA_URL = '/media/'  # cloudinary storage handles the full URL internally
+    _media_backend = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 else:
-    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
-    MEDIA_URL = '/media/'
+    _media_backend = 'django.core.files.storage.FileSystemStorage'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# static files served by whitenoise in production
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STORAGES = {
+    'default': {'BACKEND': _media_backend},
+    # static files served by whitenoise in production
+    'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'},
+}
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 CSRF_TRUSTED_ORIGINS = ['https://medscan-ai-production-249d.up.railway.app']
